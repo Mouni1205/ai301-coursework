@@ -15,8 +15,7 @@ label is not graded.
 
 **GitHub username**
 
-[Your GitHub username, exactly as it appears on your profile — no `@`, no profile URL. Your
-comments upstream are identified by this name.]
+Mouni1205
 
 ---
 
@@ -42,28 +41,25 @@ fields.
 
 **Run history**
 
-[The agreement score of each run you did, in order. A single run is a complete answer if
-only one run occurred. **The last score in your list must match the agreement line in the
-`eval-run.txt` you committed** — that file is the record of your final run.]
+1. The first complete run reported: `agreement: 17/20 scored items  (bar: 18/20: below the bar)`. Its category line was `categories: clear-accept 5/8  disclosure 1/1  no-evidence 4/4  unfollowable-comms 3/3  wrong-target 4/4`.
+2. I re-ran the disagreements and canaries (`pkg-01,pkg-02,pkg-09,pkg-10,pkg-16`): `agreement: 5/5 scored items`; `categories: clear-accept 3/3  wrong-target 2/2`.
+3. The next complete run reported: `agreement: 18/20 scored items  (bar: 18/20: PASS)`. It still rejected `pkg-09` and `pkg-10`, both gold-labeled accept.
+4. After clarifying how the artifact check handles an honest cannot-reproduce attempt, I re-ran `pkg-02,pkg-09,pkg-10,pkg-16`: `agreement: 4/4 scored items`; `categories: clear-accept 2/2  wrong-target 2/2`.
+5. The final complete run reported: `agreement: 20/20 scored items  (bar: 18/20: PASS)`. Its category line was `categories: clear-accept 8/8  disclosure 1/1  no-evidence 4/4  unfollowable-comms 3/3  wrong-target 4/4`.
 
 **Package analysis**
 
-[Pick one scored package (`pkg-01` through `pkg-20` — the four `calib-` packages are never
-scored). Name it by id, say what your rubric decided and what the gold label said, and
-explain why your rubric read it that way.]
+For `pkg-09`, my first complete run decided `reject` while the gold label was `accept`. The report explicitly says, `I did not find a knob to force a smaller limit from the CLI.` My first wording treated failure to show the exact differential flush trigger as failure of the artifact check, even though the report documented a concrete attempt, its observed marker order, and the limitation honestly. I revised the check to evaluate the evidence against the report's stated cannot-reproduce outcome. The final full run decided `accept`, matching the gold label.
 
 **Check rationale**
 
-[Quote one check from the `rubric.md` you uploaded to `tools/repro-check/`, exactly as it reads now.
-Then say why it reads that way — what you revised to get there, or what you rejected in
-favour of it.]
+> Evidence matches the reported result | The report's output, logs, screenshots, measurements, or other artifacts compared directly with the issue's trigger and with the author's stated outcome (reproduced or cannot reproduce). | For a claimed reproduction, pass only when the artifact demonstrates the same symptom under the relevant trigger, not just a different error or adjacent behavior. For an explicit cannot-reproduce report, pass when it documents a concrete attempt to exercise the issue's scenario, shows what happened instead, and openly identifies a relevant limitation or trigger condition the attempt could not reach. Do not require a cannot-reproduce attempt to display the bug; fail only when it changes the reported trigger without acknowledging that difference, provides no observable result, or falsely claims confirmation. | required |
+
+I revised this check after the first full run because `pkg-09` and `pkg-10` were honest cannot-reproduce reports, but their artifacts were being judged as though every report had to show the bug. The revised wording lets a documented attempt pass when it states what happened and what limited the attempt, while keeping wrong-trigger and unsupported-confirmation cases rejectable.
 
 **Trade-offs**
 
-[Every check gives something up. Any one of these is a complete answer: a package whose
-result it changes, a canary you re-ran with `--only`, a case you accept it will miss, or a
-stated reason nothing changed elsewhere. "Nothing changed, and here is how I know" earns
-the point in full when the reason follows.]
+The revised check accepts an honest cannot-reproduce attempt even when the issue's hidden trigger condition could not be reached; it does not treat that result as proof the bug is absent. To check that this did not loosen rejection of wrong-target reports, I re-ran canaries: `pkg-02  reject  reject   yes` and `pkg-16  reject  reject   yes`. The final full run matched `20/20`, including all `4/4` wrong-target packages and the single `disclosure 1/1` package.
 
 ---
 
