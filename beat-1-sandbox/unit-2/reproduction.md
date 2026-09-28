@@ -23,16 +23,27 @@ Mouni1205
 
 **Claim comment**
 
-[Link to the comment where you claimed the issue. Use the comment's own permalink, not the
-issue page on its own. **Then paste the text of that comment underneath the link** — the
-pasted text is what this field is graded on, so copy across what you actually posted.]
+https://github.com/codepath/pathreview-ai301-fa26-s3/issues/72#issuecomment-5862683350
+
+I reproduced #72: verify_password("password", "not_a_valid_bcrypt_hash") raises passlib.exc.UnknownHashError instead of returning False. I’d like to work on the fix, if this issue is still available.
 
 **Reproduction comment**
 
-[Link to the comment where you posted your reproduction. It must record the environment
-(OS, relevant versions, code state), steps a stranger could follow, and what you observed.
-**Then paste the text of that comment underneath the link** — the pasted text is what this
-field is graded on, so copy across what you actually posted.]
+https://github.com/codepath/pathreview-ai301-fa26-s3/issues/72#issuecomment-5862742910
+
+Reproduced on macOS 26.6.2 (arm64), Python 3.13.7, passlib 1.7.4, bcrypt 4.3.0, at commit 2f4e82f.
+
+From the repository root, install the development dependencies and run the test:
+
+python3 -m venv .venv
+.venv/bin/pip install -e ".[dev]"
+.venv/bin/pytest tests/unit/test_security.py::TestSecurity::test_verify_with_wrong_hash_format -v
+
+The test reports XFAIL because it is marked as an expected failure. To see the exception directly, run:
+
+.venv/bin/python -c 'from core.security import verify_password; print(verify_password("password", "not_a_valid_bcrypt_hash"))'
+
+This raises passlib.exc.UnknownHashError: hash could not be identified. Expected behavior: verify_password() returns False.
 
 ## Eval iterations
 
