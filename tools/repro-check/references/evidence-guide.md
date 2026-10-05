@@ -66,15 +66,11 @@ For a claimed reproduction, good evidence exhibits the issue's
 distinctive symptom under the relevant trigger. A startup banner,
 unrelated error, graceful argument-validation failure, or output from a
 modified trigger does not establish the reported behavior. For an
-explicit cannot-reproduce report, good evidence records a concrete
-attempt to exercise the scenario, the observable result, and the
-condition that limited the attempt (for example, an unavailable target
-shell or an unforced threshold). The bug need not appear in a report
-that honestly says it could not be reproduced. Fail when the author
-silently changes the issue's trigger, supplies no observable result, or
-calls a different result confirmation. A control run can isolate the
-trigger; where the artifact itself is already diagnostic, its absence
-is not a defect.
+explicit cannot-reproduce report, good evidence records an attempt to
+exercise the scenario and its observable result; the bug need not
+appear. Whether the stated conclusion is justified belongs to the
+Honesty check. A control run can isolate the trigger; where the artifact
+itself is already diagnostic, its absence is not a defect.
 
 ## Honesty
 
@@ -84,11 +80,11 @@ Also compare claim-comment assertions such as "reproduced" or a stated
 root cause with the report that is supplied alongside it.
 
 Good evidence supports the conclusion at the level stated. A genuine
-cannot-reproduce report can be useful and pass when it says what was
-tried, what happened, and which material condition differed; it must
-not present a different error or missing artifact as confirmation.
-Repeated certainty does not strengthen an artifact that shows the wrong
-behavior.
+cannot-reproduce report can pass without demonstrating the bug when it
+states what was tried, what happened, and which material condition
+differed. It must not present a different result or missing evidence as
+confirmation of the issue. Repeated certainty does not strengthen an
+artifact that shows the wrong behavior.
 
 ## Comms
 

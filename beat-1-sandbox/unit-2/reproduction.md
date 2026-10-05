@@ -35,15 +35,21 @@ Reproduced on macOS 26.6.2 (arm64), Python 3.13.7, passlib 1.7.4, bcrypt 4.3.0, 
 
 From the repository root, install the development dependencies and run the test:
 
+```sh
 python3 -m venv .venv
 .venv/bin/pip install -e ".[dev]"
 .venv/bin/pytest tests/unit/test_security.py::TestSecurity::test_verify_with_wrong_hash_format -v
+```
 
 The test reports XFAIL because it is marked as an expected failure. To see the exception directly, run:
 
+```sh
 .venv/bin/python -c 'from core.security import verify_password; print(verify_password("password", "not_a_valid_bcrypt_hash"))'
+```
 
+```text
 This raises passlib.exc.UnknownHashError: hash could not be identified. Expected behavior: verify_password() returns False.
+```
 
 ## Eval iterations
 
